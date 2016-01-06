@@ -2,6 +2,9 @@ group 'org.lst.trading'
 version '1.0'
 
 apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = 'org.lst.trading.main.BacktestMain'
 
 sourceCompatibility = 1.8
 
@@ -11,8 +14,8 @@ repositories {
 
 dependencies {
     // math
-    compile 'org.apache.commons:commons-math3:3.4.1'
-    compile 'org.la4j:la4j:0.5.5'
+    compile 'org.apache.commons:commons-math3:3.4.+'
+    compile 'org.la4j:la4j:0.5.+'
 
     // util
     compile 'io.reactivex:rxjava:1.0.+'
