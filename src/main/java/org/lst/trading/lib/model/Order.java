@@ -4,21 +4,28 @@ import java.time.Instant;
 
 public interface Order {
     int getId();
+
     int getAmount();
+
     double getOpenPrice();
+
     Instant getOpenInstant();
+
     String getInstrument();
-    boolean isLong();
 
-    static int getSideSign(Order order) {
-        return getSideSign(order.isLong());
+    default boolean isLong() {
+        return getAmount() > 0;
     }
 
-    static int getSideSign(boolean isLong) {
-        return isLong ? 1 : -1;
+    default boolean isShort() {
+        return !isLong();
     }
 
-    static double getPl(Order order, double currentPrice) {
-        return order.getAmount() * (currentPrice - order.getOpenPrice()) * getSideSign(order);
+    default int getSign() {
+        return isLong() ? 1 : -1;
+    }
+
+    default double calculatePl(double currentPrice) {
+        return getAmount() * (currentPrice - getOpenPrice());
     }
 }

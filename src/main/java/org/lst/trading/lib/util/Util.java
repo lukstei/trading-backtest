@@ -1,7 +1,6 @@
 package org.lst.trading.lib.util;
 
 
-import org.lst.trading.lib.series.DoubleSeries;
 import org.lst.trading.lib.series.MultipleDoubleSeries;
 
 import java.io.File;
@@ -9,38 +8,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.Duration;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.util.Collection;
-import java.util.List;
-import java.util.Locale;
-import java.util.stream.DoubleStream;
 
 import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toList;
 
 public class Util {
-
-    public static Path writeCsv(DoubleSeries series) {
-        return writeCsv(new MultipleDoubleSeries(series));
-    }
-
-    public static Path writeCsv(double[][] series, Collection<String> names) {
-        StringBuilder csv = new StringBuilder();
-        csv.append(names.stream().collect(joining(","))).append("\n");
-
-        for (int i = 0; i < series[0].length; i++) {
-            for (int j = 0; j < series.length; j++) {
-                if (j > 0) {
-                    csv.append(",");
-                }
-                csv.append(series[j][i]);
-            }
-            csv.append("\n");
-        }
-        return writeStringToTempFile(csv.toString());
-    }
 
     public static Path writeCsv(MultipleDoubleSeries series) {
         String data =

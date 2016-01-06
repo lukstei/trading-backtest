@@ -1,7 +1,7 @@
 package org.lst.trading.main;
 
 import org.lst.trading.lib.backtest.Backtest;
-import org.lst.trading.lib.backtest.SimpleClosedOrder;
+import org.lst.trading.lib.model.ClosedOrder;
 import org.lst.trading.lib.model.TradingStrategy;
 import org.lst.trading.lib.series.MultipleDoubleSeries;
 import org.lst.trading.lib.util.Util;
@@ -19,21 +19,26 @@ public class BacktestMain {
         String x = "GLD";
         String y = "GDX";
 
+        // initialize the trading strategy
         TradingStrategy strategy = new CointegrationTradingStrategy(x, y);
 
+        // download historical prices
         YahooFinance finance = new YahooFinance();
-
         MultipleDoubleSeries priceSeries = new MultipleDoubleSeries(finance.getHistoricalAdjustedPrices(x).toBlocking().first(), finance.getHistoricalAdjustedPrices(y).toBlocking().first());
 
+        // initialize the backtesting engine
         int deposit = 15000;
         Backtest backtest = new Backtest(deposit, priceSeries);
         backtest.setLeverage(4);
+
+        // do the backtest
         Backtest.Result result = backtest.run(strategy);
 
+        // show results
         StringBuilder orders = new StringBuilder();
         orders.append("id,amount,side,instrument,from,to,open,close,pl\n");
-        for (SimpleClosedOrder order : result.getOrders()) {
-            orders.append(format(Locale.US, "%d,%d,%s,%s,%s,%s,%f,%f,%f\n", order.getId(), order.getAmount(), order.isLong() ? "Buy" : "Sell", order.getInstrument(), order.getOpenInstant(), order.getCloseInstant(), order.getOpenPrice(), order.getClosePrice(), order.getPl()));
+        for (ClosedOrder order : result.getOrders()) {
+            orders.append(format(Locale.US, "%d,%d,%s,%s,%s,%s,%f,%f,%f\n", order.getId(), Math.abs(order.getAmount()), order.isLong() ? "Buy" : "Sell", order.getInstrument(), order.getOpenInstant(), order.getCloseInstant(), order.getOpenPrice(), order.getClosePrice(), order.getPl()));
         }
         System.out.print(orders);
 

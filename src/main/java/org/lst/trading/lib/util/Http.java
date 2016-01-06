@@ -9,6 +9,7 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rx.Observable;
+import rx.Observable.OnSubscribe;
 import rx.Subscriber;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
@@ -32,7 +33,7 @@ public class Http {
         HttpGet request = new HttpGet(url);
         configureRequest.accept(request);
 
-        return Observable.create(new Observable.OnSubscribe<HttpResponse>() {
+        return Observable.create(new OnSubscribe<HttpResponse>() {
             @Override public void call(Subscriber<? super HttpResponse> s) {
                 try {
                     log.debug("GET {}", url);

@@ -35,34 +35,8 @@ public class YahooFinance implements HistoricalPriceService {
 
     private static final Logger log = LoggerFactory.getLogger(YahooFinance.class);
 
-    public Observable<List<Quote>> getQuotes(String... symbols) throws IOException, URISyntaxException {
-        String symbolsJoined = Stream.of(symbols).collect(joining(","));
-
-        return Http.get(format("http://download.finance.yahoo.com/d/quotes.csv?s=%s&f=sabt1d1&e=.csv", symbolsJoined))
-            .flatMap(Http.asString())
-            .map(csv -> {
-                String[] lines = csv.split("\n");
-                List<Quote> quotes = new ArrayList<>();
-
-                for (int i = 0; i < lines.length; i++) {
-                    String[] s = lines[i].trim().replace("\"", "").split(",");
-                    check(s[0].equalsIgnoreCase(symbols[i]));
-
-                    double avgPrice = (Double.parseDouble(s[1]) + Double.parseDouble(s[2])) / 2;
-                    LocalTime time = LocalTime.parse(s[3].toUpperCase(), DateTimeFormatter.ofPattern("h:ma"));
-                    LocalDate date = LocalDate.parse(s[4], DateTimeFormatter.ofPattern("M/d/yyyy"));
-                    Instant instant = date.atTime(time).atZone(ZoneId.of("America/New_York")).toInstant();
-                    quotes.add(new Quote(s[0], avgPrice, instant));
-                }
-
-                return quotes;
-            });
-    }
-
-    public static Observable<Double> getAdv(String symbol) {
-        return Http.get(format("http://download.finance.yahoo.com/d/quotes.csv?s=%s&f=a2&e=.csv", symbol))
-            .flatMap(Http.asString())
-            .map(Double::parseDouble);
+    @Override public Observable<DoubleSeries> getHistoricalAdjustedPrices(String symbol) {
+        return getHistoricalAdjustedPrices(symbol, DEFAULT_FROM.toInstant());
     }
 
     public Observable<DoubleSeries> getHistoricalAdjustedPrices(String symbol, Instant from) {
@@ -73,22 +47,17 @@ public class YahooFinance implements HistoricalPriceService {
         return getHistoricalPricesCsv(symbol, from, to).map(csv -> csvToDoubleSeries(csv, symbol));
     }
 
-    public DoubleSeries csvToDoubleSeries(String csv, String symbol) {
+    private static Observable<String> getHistoricalPricesCsv(String symbol, Instant from, Instant to) {
+        return Http.get(createHistoricalPricesUrl(symbol, from, to))
+            .flatMap(Http.asString());
+    }
+
+    private static DoubleSeries csvToDoubleSeries(String csv, String symbol) {
         Stream<String> lines = Stream.of(csv.split("\n"));
         DoubleSeries prices = CsvReader.parse(lines, SEP, DATE_COLUMN, ADJ_COLUMN);
         prices.setName(symbol);
         prices = prices.toAscending();
         return prices;
-    }
-
-
-    public Observable<DoubleSeries> getHistoricalAdjustedPrices(String symbol) {
-        return getHistoricalAdjustedPrices(symbol, DEFAULT_FROM.toInstant());
-    }
-
-    public Observable<String> getHistoricalPricesCsv(String symbol, Instant from, Instant to) {
-        return Http.get(createHistoricalPricesUrl(symbol, from, to))
-            .flatMap(Http.asString());
     }
 
     private static String createHistoricalPricesUrl(String symbol, Instant from, Instant to) {

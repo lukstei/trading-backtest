@@ -4,9 +4,10 @@ import java.time.Instant;
 
 public interface ClosedOrder extends Order {
     double getClosePrice();
+
     Instant getCloseInstant();
 
-    public default double getPl() {
-        return Order.getPl(this, getClosePrice());
+    default double getPl() {
+        return calculatePl(getClosePrice());
     }
 }

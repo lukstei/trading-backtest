@@ -5,7 +5,7 @@ import org.lst.trading.lib.model.Order;
 
 import java.time.Instant;
 
-public class SimpleClosedOrder implements ClosedOrder {
+class SimpleClosedOrder implements ClosedOrder {
     SimpleOrder mOrder;
     double mClosePrice;
     Instant mCloseInstant;
@@ -15,7 +15,7 @@ public class SimpleClosedOrder implements ClosedOrder {
         mOrder = order;
         mClosePrice = closePrice;
         mCloseInstant = closeInstant;
-        mPl = Order.getPl(this, closePrice);
+        mPl = calculatePl(mClosePrice);
     }
 
     @Override public int getId() {
