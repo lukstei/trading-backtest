@@ -29,7 +29,7 @@ and if the last residual is greater than some threshold value you go short `n` A
 For further explanation and a formal definition of cointegration and the strategy you may want to look at:
 
 * https://www.quantopian.com/posts/how-to-build-a-pairs-trading-strategy-on-quantopian or
-* Ernie Chans book Algorithmic Trading: Winning Strategies and Their Rationale
+* Ernie Chan's book Algorithmic Trading: Winning Strategies and Their Rationale
 
 A good introduction video series to the Kalman filter can be found at Udacity (https://www.udacity.com/wiki/cs373/unit-2).
 
@@ -98,6 +98,7 @@ The `onTick()` method is called for every price change, all relevant information
  * [DoubleSeries](https://github.com/lukstei/trading-backtest/blob/master/src/main/java/org/lst/trading/lib/series/DoubleSeries.java): A time series class which has doubles as values. (corresponds to a pandas.Series (python))
  * [MultipleDoubleSeries](https://github.com/lukstei/trading-backtest/blob/master/src/main/java/org/lst/trading/lib/series/MultipleDoubleSeries.java): A time series class which has multiple doubles as values. (corresponds to a pandas.DataFrame or a R Dataframe)
 * [KalmanFilter](https://github.com/lukstei/trading-backtest/blob/master/src/main/java/org/lst/trading/main/strategy/kalman/KalmanFilter.java):  A general purpose and fast Kalman filter implementation.
+* [Cointegration](https://github.com/lukstei/trading-backtest/blob/master/src/main/java/org/lst/trading/main/strategy/kalman/Cointegration.java):  A cointegration model using a Kalman filter.
 * [CointegrationTradingStrategy](https://github.com/lukstei/trading-backtest/blob/master/src/main/java/org/lst/trading/main/strategy/kalman/CointegrationTradingStrategy.java):  The cointegration strategy implementation.
 
 
@@ -159,7 +160,7 @@ Feel free to do anything what you want with the code.
 
 ## Who?
 
-My name is Lukas Steinbrecher I'm currently in the last year of the business informatics (Economics and Computer Science) master at Vienna UT.
+My name is Lukas Steinbrecher, I'm currently in the last year of the business informatics (Economics and Computer Science) master at Vienna UT.
 I'm interested in financial markets, (algorithmic) trading, computer science and also bayesian statistics (especially MCMC methods) and I'm currently a CFA Level 1 candidate.
 
 If you have any questions or comments feel free to contact me at steinbrecherluk@gmail.com.
