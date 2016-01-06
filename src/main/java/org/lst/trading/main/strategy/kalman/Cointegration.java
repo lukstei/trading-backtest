@@ -1,8 +1,8 @@
-package org.lst.trading.lib.kalman;
+package org.lst.trading.main.strategy.kalman;
 
 import org.la4j.Matrix;
 
-public class Cointegration { // todo: check
+public class Cointegration {
     double mDelta;
     double mR;
     KalmanFilter mFilter;

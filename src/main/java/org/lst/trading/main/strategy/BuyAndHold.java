@@ -1,4 +1,4 @@
-package org.lst.trading.lib.strategy;
+package org.lst.trading.main.strategy;
 
 import org.lst.trading.lib.model.Order;
 import org.lst.trading.lib.model.TradingStrategy;

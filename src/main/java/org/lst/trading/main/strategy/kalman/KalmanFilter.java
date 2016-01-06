@@ -1,4 +1,4 @@
-package org.lst.trading.lib.kalman;
+package org.lst.trading.main.strategy.kalman;
 
 
 import org.la4j.LinearAlgebra;

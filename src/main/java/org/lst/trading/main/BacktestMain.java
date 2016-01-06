@@ -1,11 +1,12 @@
-package org.lst.trading.lib.strategy;
+package org.lst.trading.main;
 
-import org.lst.trading.lib.model.TradingStrategy;
 import org.lst.trading.lib.backtest.Backtest;
 import org.lst.trading.lib.backtest.SimpleClosedOrder;
+import org.lst.trading.lib.model.TradingStrategy;
 import org.lst.trading.lib.series.MultipleDoubleSeries;
 import org.lst.trading.lib.util.Util;
 import org.lst.trading.lib.util.yahoo.YahooFinance;
+import org.lst.trading.main.strategy.kalman.CointegrationTradingStrategy;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -13,14 +14,12 @@ import java.util.Locale;
 
 import static java.lang.String.format;
 
-public class TestStrategy {
+public class BacktestMain {
     public static void main(String[] args) throws URISyntaxException, IOException {
-        String x = "FB";
-        String y = "YHOO";
+        String x = "GLD";
+        String y = "GDX";
 
-        TradingStrategy strategy = MultipleTradingStrategy.of(
-                new CointegrationTradingStrategy(1, x, y)
-        );
+        TradingStrategy strategy = new CointegrationTradingStrategy(x, y);
 
         YahooFinance finance = new YahooFinance();
 
@@ -45,7 +44,7 @@ public class TestStrategy {
         System.out.println("Prices: " + priceSeries);
         System.out.println(format(Locale.US, "Simulated %d days, Initial deposit %d, Leverage %f", days, deposit, backtest.getLeverage()));
         System.out.println(format(Locale.US, "Commissions = %f", result.getCommissions()));
-        System.out.println(format(Locale.US, "P/L = %.2f, Final value = %.2f, Result = %.2f%%, Annualized = %.2f%%", result.getPl(), result.getFinalValue(), result.getReturn() * 100, result.getReturn() / (days / 251.) * 100));
+        System.out.println(format(Locale.US, "P/L = %.2f, Final value = %.2f, Result = %.2f%%, Annualized = %.2f%%, Sharpe (rf=0%%) = %.2f", result.getPl(), result.getFinalValue(), result.getReturn() * 100, result.getReturn() / (days / 251.) * 100, result.getSharpe()));
 
         System.out.println("Orders: " + Util.writeStringToTempFile(orders.toString()));
         System.out.println("Statistics: " + Util.writeCsv(new MultipleDoubleSeries(result.getPlHistory(), result.getMarginHistory())));
