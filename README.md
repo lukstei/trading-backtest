@@ -17,10 +17,12 @@ Some advantages to other backtesting implementations are:
 
 I've written this library to primarily try out this strategy.
 
-The cointegration strategy or also known as pairs trading strategy tries to take two stocks and create a linear model to find a
-optimal hedge ratio between them to create a stationary process.
+The cointegration strategy, or also known as pairs trading strategy, tries to take two stocks and create a linear model to find a
+optimal hedge ratio between them in order create a stationary process.
+
 Assume stocks A and B with prices Pa and Pb respectively, we set `Pa = alpha + beta*Pb` and try to find optimal `alpha` and `beta`.
 One method to find `alpha` and `beta` is using a so called Kalman Filter which is a dynamic bayesian model and we use it as an online linear regression model for getting our values.
+
 After we've found the values we look at the residuals given by `residuals = Pa - alpha - beta*Pb`,
 and if the last residual is greater than some threshold value you go short n*A stocks and long n*beta*B, for some fixed `n`.
 
@@ -37,7 +39,7 @@ A good introduction video series to the Kalman filter can be found at Udacity (h
 
 Run a backtest skeleton:
 
-```
+```java
 void doBacktest() {
         String x = "GLD";
         String y = "GDX";
@@ -62,9 +64,47 @@ void doBacktest() {
 }
 ```
 
-To run a backtest, edit and then run the main class `org.lst.trading.main.BacktestMain`.
-By default the cointegration strategy is executed with the GLD vs. GDX ETF's and you might get a result like this:
+### Creating a new strategy
 
+Just create a class which implements `org.lst.trading.lib.model.TradingStrategy`, for example a simple buy and hold strategy might look like this:
+
+```java
+public class BuyAndHold implements TradingStrategy {
+    Map<String, Order> mOrders;
+    TradingContext mContext;
+
+    @Override public void onStart(TradingContext context) {
+        mContext = context;
+    }
+
+    @Override public void onTick() {
+        if (mOrders == null) {
+            mOrders = new HashMap<>();
+            mContext.getInstruments().stream().forEach(instrument -> mOrders.put(instrument, mContext.order(instrument, true, 1)));
+        }
+    }
+}
+```
+
+The `onTick()` method is called for every price change, all relevant information (like historical prices, etc..) is available through
+`TradingContext` and also orders can be submitted through it.
+
+
+## Interesting classes to look at
+
+* [org.lst.trading.lib.backtest.Backtest](https://github.com/lukstei/trading-backtest/blob/master/src/main/java/org/lst/trading/lib/backtest/Backtest.java): The core class which runs the backtest
+* package `org.lst.trading.lib.series`:
+** `org.lst.trading.lib.series.TimeSeries`: A general purpose generic time series data structure implementation and handles stuff like mapping, merging and filtering.
+** `org.lst.trading.lib.series.DoubleSeries`: A time series class which has doubles as values. (corresponds to a pandas.Series (python))
+** `org.lst.trading.lib.series.MultipleDoubleSeries`: A time series class which has multiple doubles as values. (corresponds to a pandas.DataFrame or a R Dataframe)
+* `org.lst.trading.main.strategy.kalman.KalmanFilter`:  A general purpose and fast Kalman filter implementation.
+* `org.lst.trading.main.strategy.kalman.CointegrationTradingStrategy`:  The cointegration strategy implementation.
+
+
+## Example run of the cointegration strategy
+
+To run a backtest, edit and then run the main class `org.lst.trading.main.BacktestMain`.
+By default the cointegration strategy is executed with the `GLD` vs. `GDX` ETF's and you might get a result like this:
 
 `$ ./gradlew run`
 
@@ -94,56 +134,18 @@ Statistics: /var/folders/_5/jv4ptlps2ydb4_ptyj_l2y100000gn/T/out-198410703193092
 ```
 
 To further investigate the results you can import the CSV files into some data analysis tool like R or Excel.
-I've created a R script which does some rudimentary analysis (in src/main/r/report.r`).
+
+I've created a R script which does some rudimentary analysis (in `src/main/r/report.r`).
 
 The return curve of the above strategy plotted using R:
-
 ![Returns](https://raw.githubusercontent.com/lukstei/trading-backtest/master/img/coint-returns.png)
 
 This is a plot of the implied residuals:
-
 ![Resiuals](https://raw.githubusercontent.com/lukstei/trading-backtest/master/img/coint-residuals.png)
 
 The cointegration can be quite profitable however the difficulty is to find some good cointegrated pairs.
 
 You might want to try for example Coca-Cola (KO) and Pepsi (PEP), gold (GLD) and gold miners (GDX) or Austrialia stock index (EWA) and Canada stock index (EWC) (both Canada and Australia are commodity based economies).
-
-
-### Creating a new strategy
-
-Just create a class which implements `org.lst.trading.lib.model.TradingStrategy`, for example a simple buy and hold strategy might look like this:
-
-```
-public class BuyAndHold implements TradingStrategy {
-    Map<String, Order> mOrders;
-    TradingContext mContext;
-
-    @Override public void onStart(TradingContext context) {
-        mContext = context;
-    }
-
-    @Override public void onTick() {
-        if (mOrders == null) {
-            mOrders = new HashMap<>();
-            mContext.getInstruments().stream().forEach(instrument -> mOrders.put(instrument, mContext.order(instrument, true, 1)));
-        }
-    }
-}
-```
-
-The `onTick()` method is called for every price change, all relevant information (like historical prices, etc..) is available through
-`TradingContext` and also orders can be submitted through it.
-
-
-## Interesting classes to look at
-
-* `org.lst.trading.lib.backtest.Backtest`: The core class which runs the backtest
-* package `org.lst.trading.lib.series`:
-** `org.lst.trading.lib.series.TimeSeries`: A general purpose generic time series data structure implementation and handles stuff like mapping, merging and filtering.
-** `org.lst.trading.lib.series.DoubleSeries`: A time series class which has doubles as values. (corresponds to a pandas.Series (python))
-** `org.lst.trading.lib.series.MultipleDoubleSeries`: A time series class which has multiple doubles as values. (corresponds to a pandas.DataFrame or a R Dataframe)
-* `org.lst.trading.main.strategy.kalman.KalmanFilter`:  A general purpose and fast Kalman filter implementation.
-* `org.lst.trading.main.strategy.kalman.CointegrationTradingStrategy`:  The cointegration strategy implementation.
 
 
 ## Why?
