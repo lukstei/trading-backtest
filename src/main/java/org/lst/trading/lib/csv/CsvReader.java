@@ -158,59 +158,59 @@ public class CsvReader {
 
     public static Stream<Bar> parse(Stream<String> lines, ParseFunction<Double> open, ParseFunction<Double> high, ParseFunction<Double> low, ParseFunction<Double> close, ParseFunction<Long> volume, ParseFunction<Instant> instant) {
         return lines
-                .map(l -> l.split(","))
-                .flatMap(new Function<String[], Stream<? extends Bar>>() {
-                    public List<Object> mColumns;
-                    int i = 0;
+            .map(l -> l.split(","))
+            .flatMap(new Function<String[], Stream<? extends Bar>>() {
+                public List<Object> mColumns;
+                int i = 0;
 
-                    @Override public Stream<? extends Bar> apply(String[] parts) {
-                        if (i++ == 0) {
-                            mColumns = Stream.of(parts).map(String::trim).collect(toList());
-                            return Stream.empty();
-                        } else {
-                            return Stream.of(
-                                    new Bar() {
-                                        private double mOpen = open.parse(parts[mColumns.indexOf(open.getColumn())]);
-                                        private double mHigh = high.parse(parts[mColumns.indexOf(high.getColumn())]);
-                                        private double mLow = low.parse(parts[mColumns.indexOf(low.getColumn())]);
-                                        private double mClose = close.parse(parts[mColumns.indexOf(close.getColumn())]);
-                                        private long mVolume = volume.parse(parts[mColumns.indexOf(volume.getColumn())]);
+                @Override public Stream<? extends Bar> apply(String[] parts) {
+                    if (i++ == 0) {
+                        mColumns = Stream.of(parts).map(String::trim).collect(toList());
+                        return Stream.empty();
+                    } else {
+                        return Stream.of(
+                            new Bar() {
+                                private double mOpen = open.parse(parts[mColumns.indexOf(open.getColumn())]);
+                                private double mHigh = high.parse(parts[mColumns.indexOf(high.getColumn())]);
+                                private double mLow = low.parse(parts[mColumns.indexOf(low.getColumn())]);
+                                private double mClose = close.parse(parts[mColumns.indexOf(close.getColumn())]);
+                                private long mVolume = volume.parse(parts[mColumns.indexOf(volume.getColumn())]);
 
-                                        @Override public double getOpen() {
-                                            return mOpen;
-                                        }
+                                @Override public double getOpen() {
+                                    return mOpen;
+                                }
 
-                                        @Override public double getHigh() {
-                                            return mHigh;
-                                        }
+                                @Override public double getHigh() {
+                                    return mHigh;
+                                }
 
-                                        @Override public double getLow() {
-                                            return mLow;
-                                        }
+                                @Override public double getLow() {
+                                    return mLow;
+                                }
 
-                                        @Override public double getClose() {
-                                            return mClose;
-                                        }
+                                @Override public double getClose() {
+                                    return mClose;
+                                }
 
-                                        @Override public long getVolume() {
-                                            return mVolume;
-                                        }
+                                @Override public long getVolume() {
+                                    return mVolume;
+                                }
 
-                                        @Override public Instant getStart() {
-                                            return instant.parse(parts[mColumns.indexOf(instant.getColumn())]);
-                                        }
+                                @Override public Instant getStart() {
+                                    return instant.parse(parts[mColumns.indexOf(instant.getColumn())]);
+                                }
 
-                                        @Override public Duration getDuration() {
-                                            return null;
-                                        }
+                                @Override public Duration getDuration() {
+                                    return null;
+                                }
 
-                                        @Override public double getWAP() {
-                                            return 0;
-                                        }
-                                    }
-                            );
-                        }
+                                @Override public double getWAP() {
+                                    return 0;
+                                }
+                            }
+                        );
                     }
-                });
+                }
+            });
     }
 }

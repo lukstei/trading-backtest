@@ -47,9 +47,9 @@ public class TimeSeries<T> implements Iterable<TimeSeries.Entry<T>> {
 
         @Override public String toString() {
             return "Entry{" +
-                    "mInstant=" + mInstant +
-                    ", mT=" + mT +
-                    '}';
+                "mInstant=" + mInstant +
+                ", mT=" + mT +
+                '}';
         }
     }
 
@@ -207,10 +207,10 @@ public class TimeSeries<T> implements Iterable<TimeSeries.Entry<T>> {
 
     @Override public String toString() {
         return mData.isEmpty() ? "TimeSeries{empty}" :
-                "TimeSeries{" +
-                        "from=" + mData.get(0).getInstant() +
-                        ", to=" + mData.get(size() - 1).getInstant() +
-                        ", size=" + mData.size() +
-                        '}';
+            "TimeSeries{" +
+                "from=" + mData.get(0).getInstant() +
+                ", to=" + mData.get(size() - 1).getInstant() +
+                ", size=" + mData.size() +
+                '}';
     }
 }

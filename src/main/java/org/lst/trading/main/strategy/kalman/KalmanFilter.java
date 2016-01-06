@@ -8,53 +8,52 @@ import org.la4j.matrix.DenseMatrix;
 /**
  * n: Number of states
  * m: Number of sensors
- *
+ * <p>
  * https://www.udacity.com/wiki/cs373/kalman-filter-matrices
- *
+ * <p>
  * Steps:
- *
- *  PREDICT X'
- *
- *  First, we predict our next x:
- *
- *  x' = Fx + u
- *
- *  UPDATE P'
- *
- *  We also update the covariance matrix according to the next prediction:
- *
- *  P' = FP(transp F)
- *
- *  UPDATE Y
- *
- *  y becomes the difference between the move and what we expected:
- *
- *  y = z - Hx
- *
- *  UPDATE S
- *
- *  S is the covariance of the move, adding up the covariance in move space of the position and the covariance of the measurement:
- *
- *  S = HP(transp H) + R
- *
- *  CALCULATE K
- *
- *  Now I start to wave my hands. I assume this next matrix is called K because this is the work of the Kalman filter. Whatever is happening here, it doesn't depend on u or z. We're computing how much of the difference between the observed move and the expected move to add to x.
- *
- *  K = P (transp H) (inv S)
- *
- *  UPDATE X'
- *
- *  We update x:
- *
- *  x' = x + Ky
- *
- *  SUBTRACT P
- *
- *  And we subtract some uncertainty from P, again not depending on u or z:
- *
- *  P' = P - P(transp H)(inv S)HP
- *
+ * <p>
+ * PREDICT X'
+ * <p>
+ * First, we predict our next x:
+ * <p>
+ * x' = Fx + u
+ * <p>
+ * UPDATE P'
+ * <p>
+ * We also update the covariance matrix according to the next prediction:
+ * <p>
+ * P' = FP(transp F)
+ * <p>
+ * UPDATE Y
+ * <p>
+ * y becomes the difference between the move and what we expected:
+ * <p>
+ * y = z - Hx
+ * <p>
+ * UPDATE S
+ * <p>
+ * S is the covariance of the move, adding up the covariance in move space of the position and the covariance of the measurement:
+ * <p>
+ * S = HP(transp H) + R
+ * <p>
+ * CALCULATE K
+ * <p>
+ * Now I start to wave my hands. I assume this next matrix is called K because this is the work of the Kalman filter. Whatever is happening here, it doesn't depend on u or z. We're computing how much of the difference between the observed move and the expected move to add to x.
+ * <p>
+ * K = P (transp H) (inv S)
+ * <p>
+ * UPDATE X'
+ * <p>
+ * We update x:
+ * <p>
+ * x' = x + Ky
+ * <p>
+ * SUBTRACT P
+ * <p>
+ * And we subtract some uncertainty from P, again not depending on u or z:
+ * <p>
+ * P' = P - P(transp H)(inv S)HP
  */
 public class KalmanFilter {
     private final int mStateCount; // n
@@ -68,7 +67,7 @@ public class KalmanFilter {
 
     /**
      * stateCount x stateCount
-     *
+     * <p>
      * Symmetric.
      * Down the diagonal of P, we find the variances of the elements of x.
      * On the off diagonals, at P[i][j], we find the covariances of x[i] with x[j].
@@ -79,7 +78,7 @@ public class KalmanFilter {
 
     /**
      * stateCount x stateCount
-     *
+     * <p>
      * Kalman filters model a system over time.
      * After each tick of time, we predict what the values of x are, and then we measure and do some computation.
      * F is used in the update step. Here's how it works: For each value in x, we write an equation to update that value,
@@ -89,18 +88,18 @@ public class KalmanFilter {
 
     /**
      * stateCount x stateCount
-     *
+     * <p>
      * Error in the process, after each update this uncertainty is added.
      */
     private Matrix mUpdateCovariance; // Q, Estimated error in process.
 
     /**
      * stateCount x 1
-     *
+     * <p>
      * The control input, the move vector.
      * It's the change to x that we cause, or that we know is happening.
      * Since we add it to x, it has dimension n. When the filter updates, it adds u to the new x.
-     *
+     * <p>
      * External moves to the system.
      */
     private Matrix mMoveVector; // u, Control vector
@@ -110,16 +109,16 @@ public class KalmanFilter {
 
     /**
      * sensorCount x 1
-     *
+     * <p>
      * z: Measurement Vector, It's the outputs from the sensors.
      */
     private Matrix mMeasurement;
 
     /**
      * sensorCount x sensorCount
-     *
+     * <p>
      * R, the variances and covariances of our sensor measurements.
-     *
+     * <p>
      * The Kalman filter algorithm does not change R, because the process can't change our belief about the
      * accuracy of our sensors--that's a property of the sensors themselves.
      * We know the variance of our sensor either by testing it, or by reading the documentation that came with it,
@@ -132,7 +131,7 @@ public class KalmanFilter {
 
     /**
      * sensorCount x stateCount
-     *
+     * <p>
      * The matrix H tells us what sensor readings we'd get if x were the true state of affairs and our sensors were perfect.
      * It's the matrix we use to extract the measurement from the data.
      * If we multiply H times a perfectly correct x, we get a perfectly correct z.

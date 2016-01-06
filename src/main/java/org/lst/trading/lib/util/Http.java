@@ -47,7 +47,8 @@ public class Http {
     }
 
     public static Observable<HttpResponse> get(String url) {
-        return get(url, x -> {});
+        return get(url, x -> {
+        });
     }
 
     public static Func1<? super HttpResponse, ? extends Observable<String>> asString() {

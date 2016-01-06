@@ -1,8 +1,8 @@
 package org.lst.trading.main.strategy;
 
 import org.lst.trading.lib.model.Order;
-import org.lst.trading.lib.model.TradingStrategy;
 import org.lst.trading.lib.model.TradingContext;
+import org.lst.trading.lib.model.TradingStrategy;
 
 import java.util.HashMap;
 import java.util.Map;

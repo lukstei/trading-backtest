@@ -1,7 +1,6 @@
 package org.lst.trading.lib.backtest;
 
 import org.lst.trading.lib.model.ClosedOrder;
-import org.lst.trading.lib.model.Order;
 
 import java.time.Instant;
 

@@ -1,7 +1,7 @@
 package org.lst.trading.main.strategy;
 
-import org.lst.trading.lib.model.TradingStrategy;
 import org.lst.trading.lib.model.TradingContext;
+import org.lst.trading.lib.model.TradingStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +39,7 @@ public class MultipleTradingStrategy implements TradingStrategy {
 
     @Override public String toString() {
         return "MultipleStrategy{" +
-                "mStrategies=" + mStrategies +
-                '}';
+            "mStrategies=" + mStrategies +
+            '}';
     }
 }

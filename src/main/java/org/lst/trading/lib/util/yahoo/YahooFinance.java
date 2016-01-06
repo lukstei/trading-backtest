@@ -8,19 +8,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rx.Observable;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.time.*;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Stream;
 
 import static java.lang.String.format;
-import static java.util.stream.Collectors.joining;
 import static org.lst.trading.lib.csv.CsvReader.ParseFunction.doubleColumn;
 import static org.lst.trading.lib.csv.CsvReader.ParseFunction.ofColumn;
-import static org.lst.trading.lib.util.Util.check;
 
 public class YahooFinance implements HistoricalPriceService {
     public static final String SEP = ",";

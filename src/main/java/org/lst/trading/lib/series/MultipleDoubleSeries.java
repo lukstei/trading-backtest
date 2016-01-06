@@ -60,11 +60,11 @@ public class MultipleDoubleSeries extends TimeSeries<List<Double>> {
 
     @Override public String toString() {
         return mData.isEmpty() ? "MultipleDoubleSeries{empty}" :
-                "MultipleDoubleSeries{" +
-                        "mNames={" + mNames.stream().collect(joining(", ")) +
-                        ", from=" + mData.get(0).getInstant() +
-                        ", to=" + mData.get(mData.size() - 1).getInstant() +
-                        ", size=" + mData.size() +
-                        '}';
+            "MultipleDoubleSeries{" +
+                "mNames={" + mNames.stream().collect(joining(", ")) +
+                ", from=" + mData.get(0).getInstant() +
+                ", to=" + mData.get(mData.size() - 1).getInstant() +
+                ", size=" + mData.size() +
+                '}';
     }
 }
