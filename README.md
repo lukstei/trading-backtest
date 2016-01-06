@@ -24,7 +24,7 @@ Assume stocks A and B with prices Pa and Pb respectively, we set `Pa = alpha + b
 One method to find `alpha` and `beta` is using a so called Kalman Filter which is a dynamic bayesian model and we use it as an online linear regression model for getting our values.
 
 After we've found the values we look at the residuals given by `residuals = Pa - alpha - beta*Pb`,
-and if the last residual is greater than some threshold value you go short n*A stocks and long n*beta*B, for some fixed `n`.
+and if the last residual is greater than some threshold value you go short `n` A stocks and long `n*beta` B stocks, for some fixed `n`.
 
 For further explanation and a formal definition of cointegration and the strategy you may want to look at:
 
@@ -94,11 +94,11 @@ The `onTick()` method is called for every price change, all relevant information
 
 * [org.lst.trading.lib.backtest.Backtest](https://github.com/lukstei/trading-backtest/blob/master/src/main/java/org/lst/trading/lib/backtest/Backtest.java): The core class which runs the backtest
 * package `org.lst.trading.lib.series`:
-** `org.lst.trading.lib.series.TimeSeries`: A general purpose generic time series data structure implementation and handles stuff like mapping, merging and filtering.
-** `org.lst.trading.lib.series.DoubleSeries`: A time series class which has doubles as values. (corresponds to a pandas.Series (python))
-** `org.lst.trading.lib.series.MultipleDoubleSeries`: A time series class which has multiple doubles as values. (corresponds to a pandas.DataFrame or a R Dataframe)
-* `org.lst.trading.main.strategy.kalman.KalmanFilter`:  A general purpose and fast Kalman filter implementation.
-* `org.lst.trading.main.strategy.kalman.CointegrationTradingStrategy`:  The cointegration strategy implementation.
+ * [org.lst.trading.lib.series.TimeSeries](https://github.com/lukstei/trading-backtest/blob/master/src/main/java/org/lst/trading/lib/series/TimeSeries.java): A general purpose generic time series data structure implementation and handles stuff like mapping, merging and filtering.
+ * [org.lst.trading.lib.series.DoubleSeries](https://github.com/lukstei/trading-backtest/blob/master/src/main/java/org/lst/trading/lib/series/DoubleSeries.java): A time series class which has doubles as values. (corresponds to a pandas.Series (python))
+ * [org.lst.trading.lib.series.MultipleDoubleSeries](https://github.com/lukstei/trading-backtest/blob/master/src/main/java/org/lst/trading/lib/series/MultipleDoubleSeries.java): A time series class which has multiple doubles as values. (corresponds to a pandas.DataFrame or a R Dataframe)
+* [org.lst.trading.main.strategy.kalman.KalmanFilter](https://github.com/lukstei/trading-backtest/blob/master/src/main/java/org/lst/trading/main/strategy/kalman/KalmanFilter.java):  A general purpose and fast Kalman filter implementation.
+* [org.lst.trading.main.strategy.kalman.CointegrationTradingStrategy](https://github.com/lukstei/trading-backtest/blob/master/src/main/java/org/lst/trading/main/strategy/kalman/CointegrationTradingStrategy.java):  The cointegration strategy implementation.
 
 
 ## Example run of the cointegration strategy
@@ -113,13 +113,7 @@ By default the cointegration strategy is executed with the `GLD` vs. `GDX` ETF's
 19:35:29.655 [RxCachedThreadScheduler-1] DEBUG org.lst.trading.lib.util.Http - GET http://ichart.yahoo.com/table.csv?s=GDX&a=0&b=1&c=2010&d=0&e=6&f=2016&g=d&ignore=.csv
 
 1,364,Buy,GDX,2010-02-23T00:00:00Z,2010-02-25T00:00:00Z,40.658018,41.566845,330.813028
-2,140,Sell,GLD,2010-02-23T00:00:00Z,2010-02-25T00:00:00Z,107.889999,108.309998,-58.799860
-3,354,Sell,GDX,2010-03-01T00:00:00Z,2010-03-04T00:00:00Z,42.705269,43.604531,-318.338748
-4,135,Buy,GLD,2010-03-01T00:00:00Z,2010-03-04T00:00:00Z,109.430000,110.830002,189.000270
-5,340,Sell,GDX,2010-03-05T00:00:00Z,2010-03-08T00:00:00Z,44.417690,43.958494,156.126640
 ...
-575,1076,Sell,GDX,2015-12-16T00:00:00Z,2015-12-17T00:00:00Z,14.049493,13.226552,885.484516
-576,144,Buy,GLD,2015-12-16T00:00:00Z,2015-12-17T00:00:00Z,102.750000,100.500000,-324.000000
 577,1081,Sell,GDX,2015-12-23T00:00:00Z,2015-12-28T00:00:00Z,13.970000,13.790000,194.580000
 578,145,Buy,GLD,2015-12-23T00:00:00Z,2015-12-28T00:00:00Z,102.309998,102.269997,-5.800145
 
