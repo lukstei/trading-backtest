@@ -92,16 +92,16 @@ The `onTick()` method is called for every price change, all relevant information
 
 ## Interesting classes to look at
 
-* [org.lst.trading.lib.backtest.Backtest](https://github.com/lukstei/trading-backtest/blob/master/src/main/java/org/lst/trading/lib/backtest/Backtest.java): The core class which runs the backtest
+* [Backtest](https://github.com/lukstei/trading-backtest/blob/master/src/main/java/org/lst/trading/lib/backtest/Backtest.java): The core class which runs the backtest
 * package `org.lst.trading.lib.series`:
- * [org.lst.trading.lib.series.TimeSeries](https://github.com/lukstei/trading-backtest/blob/master/src/main/java/org/lst/trading/lib/series/TimeSeries.java): A general purpose generic time series data structure implementation and handles stuff like mapping, merging and filtering.
- * [org.lst.trading.lib.series.DoubleSeries](https://github.com/lukstei/trading-backtest/blob/master/src/main/java/org/lst/trading/lib/series/DoubleSeries.java): A time series class which has doubles as values. (corresponds to a pandas.Series (python))
- * [org.lst.trading.lib.series.MultipleDoubleSeries](https://github.com/lukstei/trading-backtest/blob/master/src/main/java/org/lst/trading/lib/series/MultipleDoubleSeries.java): A time series class which has multiple doubles as values. (corresponds to a pandas.DataFrame or a R Dataframe)
-* [org.lst.trading.main.strategy.kalman.KalmanFilter](https://github.com/lukstei/trading-backtest/blob/master/src/main/java/org/lst/trading/main/strategy/kalman/KalmanFilter.java):  A general purpose and fast Kalman filter implementation.
-* [org.lst.trading.main.strategy.kalman.CointegrationTradingStrategy](https://github.com/lukstei/trading-backtest/blob/master/src/main/java/org/lst/trading/main/strategy/kalman/CointegrationTradingStrategy.java):  The cointegration strategy implementation.
+ * [TimeSeries](https://github.com/lukstei/trading-backtest/blob/master/src/main/java/org/lst/trading/lib/series/TimeSeries.java): A general purpose generic time series data structure implementation and handles stuff like mapping, merging and filtering.
+ * [DoubleSeries](https://github.com/lukstei/trading-backtest/blob/master/src/main/java/org/lst/trading/lib/series/DoubleSeries.java): A time series class which has doubles as values. (corresponds to a pandas.Series (python))
+ * [MultipleDoubleSeries](https://github.com/lukstei/trading-backtest/blob/master/src/main/java/org/lst/trading/lib/series/MultipleDoubleSeries.java): A time series class which has multiple doubles as values. (corresponds to a pandas.DataFrame or a R Dataframe)
+* [KalmanFilter](https://github.com/lukstei/trading-backtest/blob/master/src/main/java/org/lst/trading/main/strategy/kalman/KalmanFilter.java):  A general purpose and fast Kalman filter implementation.
+* [CointegrationTradingStrategy](https://github.com/lukstei/trading-backtest/blob/master/src/main/java/org/lst/trading/main/strategy/kalman/CointegrationTradingStrategy.java):  The cointegration strategy implementation.
 
 
-## Example run of the cointegration strategy
+### Example run of the cointegration strategy
 
 To run a backtest, edit and then run the main class `org.lst.trading.main.BacktestMain`.
 By default the cointegration strategy is executed with the `GLD` vs. `GDX` ETF's and you might get a result like this:
@@ -132,9 +132,11 @@ To further investigate the results you can import the CSV files into some data a
 I've created a R script which does some rudimentary analysis (in `src/main/r/report.r`).
 
 The return curve of the above strategy plotted using R:
+
 ![Returns](https://raw.githubusercontent.com/lukstei/trading-backtest/master/img/coint-returns.png)
 
 This is a plot of the implied residuals:
+
 ![Resiuals](https://raw.githubusercontent.com/lukstei/trading-backtest/master/img/coint-residuals.png)
 
 The cointegration can be quite profitable however the difficulty is to find some good cointegrated pairs.
