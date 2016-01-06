@@ -4,13 +4,13 @@ This is a general purpose lightweight backtesting engine for stocks, written in 
 
 Some advantages to other backtesting implementations are:
 
-*) It uses a callback model and since it is implemented in java it should be pretty performant when running many backtests
-*) Implemented in a mature programming language
-*) Easily extensible
-*) Strategies are easily debuggable using a java IDE
-*) Lightweight and therefore the backtesting engine is easily verifiable
-*) No dependencies
-*) Backtesting results are further analyzable in R or Excel since it uses a CSV output format
+* It uses a callback model and since it is implemented in java it should be pretty performant when running many backtests
+* Implemented in a mature programming language
+* Easily extensible
+* Strategies are easily debuggable using a java IDE
+* Lightweight and therefore the backtesting engine is easily verifiable
+* No dependencies
+* Backtesting results are further analyzable in R or Excel since it uses a CSV output format
 
 
 ### Cointegration/Pairs trading
@@ -19,19 +19,17 @@ I've written this library to primarily try out this strategy.
 
 The cointegration strategy or also known as pairs trading strategy tries to take two stocks and create a linear model to find a
 optimal hedge ratio between them to create a stationary process.
-Assume stocks A and B with prices Pa and Pb respectively, `
-you set `Pa = alpha + beta*Pb` and try to find optimal `alpha` and `beta`.
+Assume stocks A and B with prices Pa and Pb respectively, we set `Pa = alpha + beta*Pb` and try to find optimal `alpha` and `beta`.
 One method to find `alpha` and `beta` is using a so called Kalman Filter which is a dynamic bayesian model and we use it as an online linear regression model for getting our values.
-After you've found the values you look at the residuals `Residual = Pa - alpha - beta*Pb`,
-and if the residual is greater than some threshold you go short n*A stocks and long n*beta*B, for some fixed `n`.
+After we've found the values we look at the residuals given by `residuals = Pa - alpha - beta*Pb`,
+and if the last residual is greater than some threshold value you go short n*A stocks and long n*beta*B, for some fixed `n`.
 
-For further explanations look you may want to look at:
+For further explanation and a formal definition of cointegration and the strategy you may want to look at:
 
 * https://www.quantopian.com/posts/how-to-build-a-pairs-trading-strategy-on-quantopian or
 * Ernie Chans book Algorithmic Trading: Winning Strategies and Their Rationale
 
 A good introduction video series to the Kalman filter can be found at Udacity (https://www.udacity.com/wiki/cs373/unit-2).
-
 
 ## How?
 
@@ -100,14 +98,15 @@ I've created a R script which does some rudimentary analysis (in src/main/r/repo
 
 The return curve of the above strategy plotted using R:
 
-![alt text](https://github.com/lukstei/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
-
+![Returns](https://raw.githubusercontent.com/lukstei/trading-backtest/master/img/coint-returns.png)
 
 This is a plot of the implied residuals:
 
+![Resiuals](https://raw.githubusercontent.com/lukstei/trading-backtest/master/img/coint-residuals.png)
 
 The cointegration can be quite profitable however the difficulty is to find some good cointegrated pairs.
-You might want to try for example Coca-Cola (KO) and Pepsi (PEP), gold (GLD) and gold miners (GDX) or
+
+You might want to try for example Coca-Cola (KO) and Pepsi (PEP), gold (GLD) and gold miners (GDX) or Austrialia stock index (EWA) and Canada stock index (EWC) (both Canada and Australia are commodity based economies).
 
 
 ### Creating a new strategy
