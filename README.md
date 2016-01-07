@@ -20,8 +20,8 @@ I've written this library to primarily try out this strategy.
 The cointegration strategy, or also known as pairs trading strategy, tries to take two stocks and create a linear model to find a
 optimal hedge ratio between them in order create a stationary process.
 
-Assume stocks A and B with prices Pa and Pb respectively, we set `Pa = alpha + beta*Pb` and try to find optimal `alpha` and `beta`.
-One method to find `alpha` and `beta` is using a so called Kalman Filter which is a dynamic bayesian model and we use it as an online linear regression model for getting our values.
+Assume stocks A and B with prices `Pa` and `Pb` respectively, we set `Pa = alpha + beta*Pb` and try to find optimal `alpha` and `beta`.
+One method to find `alpha` and `beta` is using a so called Kalman Filter which is a dynamic bayesian model and we use it as an online linear regression model to get our values.
 
 After we've found the values we look at the residuals given by `residuals = Pa - alpha - beta*Pb`,
 and if the last residual is greater than some threshold value you go short `n` A stocks and long `n*beta` B stocks, for some fixed `n`.
@@ -94,7 +94,7 @@ The `onTick()` method is called for every price change, all relevant information
 
 * [Backtest](https://github.com/lukstei/trading-backtest/blob/master/src/main/java/org/lst/trading/lib/backtest/Backtest.java): The core class which runs the backtest
 * package `org.lst.trading.lib.series`:
- * [TimeSeries](https://github.com/lukstei/trading-backtest/blob/master/src/main/java/org/lst/trading/lib/series/TimeSeries.java): A general purpose generic time series data structure implementation and handles stuff like mapping, merging and filtering.
+ * [TimeSeries](https://github.com/lukstei/trading-backtest/blob/master/src/main/java/org/lst/trading/lib/series/TimeSeries.java): A general purpose generic time series data structure implementation and which handles stuff like mapping, merging and filtering.
  * [DoubleSeries](https://github.com/lukstei/trading-backtest/blob/master/src/main/java/org/lst/trading/lib/series/DoubleSeries.java): A time series class which has doubles as values. (corresponds to a pandas.Series (python))
  * [MultipleDoubleSeries](https://github.com/lukstei/trading-backtest/blob/master/src/main/java/org/lst/trading/lib/series/MultipleDoubleSeries.java): A time series class which has multiple doubles as values. (corresponds to a pandas.DataFrame or a R Dataframe)
 * [KalmanFilter](https://github.com/lukstei/trading-backtest/blob/master/src/main/java/org/lst/trading/main/strategy/kalman/KalmanFilter.java):  A general purpose and fast Kalman filter implementation.
