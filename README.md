@@ -2,7 +2,7 @@
 
 This is a general purpose lightweight backtesting engine for stocks, written in modern Java 8.
 
-Some advantages to other backtesting implementations are:
+Some advantages compared to other backtesting implementations are:
 
 * It uses a callback model and since it is implemented in java it should be pretty performant when running many backtests
 * Implemented in a mature programming language
@@ -15,7 +15,7 @@ Some advantages to other backtesting implementations are:
 
 ### Cointegration/Pairs trading
 
-I've written this library to primarily try out this strategy.
+I've written this library primarily to try out this particular strategy.
 
 The cointegration strategy, or also known as pairs trading strategy, tries to take two stocks and create a linear model to find a
 optimal hedge ratio between them in order create a stationary process.
@@ -160,8 +160,8 @@ Feel free to do anything what you want with the code.
 
 ## Who?
 
-My name is Lukas Steinbrecher, I'm currently in the last year of the business informatics (Economics and Computer Science) master at Vienna UT.
-I'm interested in financial markets, (algorithmic) trading, computer science and also bayesian statistics (especially MCMC methods) and I'm currently a CFA Level 1 candidate.
+My name is Lukas Steinbrecher, I'm currently in the last year of the business informatics (Economics and Computer Science) master at Vienna University of Technology.
+I'm interested in financial markets, (algorithmic) trading, computer science and also bayesian statistics (especially MCMC methods).
 
 If you have any questions or comments feel free to contact me via lukas@lukstei.com or on [lukstei.com](https://lukstei.com).
 
