@@ -16,7 +16,5 @@ kalmanStatistics$date = as.Date(kalmanStatistics$date)
 plot(kalmanStatistics$beta, type='l')
 
 series = kalmanStatistics$y - kalmanStatistics$x * kalmanStatistics$beta - kalmanStatistics$alpha
-# series = kalmanStatistics$errors
 
 plot(kalmanStatistics$date[50:length(series)], series[50:length(series)], type='l', xlab = 'Date', ylab='Residuals')
-
