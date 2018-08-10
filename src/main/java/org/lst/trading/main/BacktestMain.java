@@ -1,18 +1,18 @@
 package org.lst.trading.main;
 
-import org.lst.trading.lib.backtest.Backtest;
-import org.lst.trading.lib.model.ClosedOrder;
-import org.lst.trading.lib.model.TradingStrategy;
-import org.lst.trading.lib.series.MultipleDoubleSeries;
-import org.lst.trading.lib.util.Util;
-import org.lst.trading.lib.util.yahoo.YahooFinance;
-import org.lst.trading.main.strategy.kalman.CointegrationTradingStrategy;
+import static java.lang.String.format;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Locale;
 
-import static java.lang.String.format;
+import org.lst.trading.lib.backtest.Backtest;
+import org.lst.trading.lib.model.ClosedOrder;
+import org.lst.trading.lib.model.TradingStrategy;
+import org.lst.trading.lib.series.MultipleDoubleSeries;
+import org.lst.trading.lib.util.Util;
+import org.lst.trading.lib.util.yahoo.YahooFinanceService;
+import org.lst.trading.main.strategy.kalman.CointegrationTradingStrategy;
 
 public class BacktestMain {
     public static void main(String[] args) throws URISyntaxException, IOException {
@@ -23,8 +23,8 @@ public class BacktestMain {
         TradingStrategy strategy = new CointegrationTradingStrategy(x, y);
 
         // download historical prices
-        YahooFinance finance = new YahooFinance();
-        MultipleDoubleSeries priceSeries = new MultipleDoubleSeries(finance.getHistoricalAdjustedPrices(x).toBlocking().first(), finance.getHistoricalAdjustedPrices(y).toBlocking().first());
+        YahooFinanceService finance = new YahooFinanceService();
+        MultipleDoubleSeries priceSeries = new MultipleDoubleSeries(finance.getHistoricalAdjustedPrices(x), finance.getHistoricalAdjustedPrices(y));
 
         // initialize the backtesting engine
         int deposit = 15000;
