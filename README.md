@@ -160,8 +160,7 @@ Feel free to do anything what you want with the code.
 
 ## Who?
 
-My name is Lukas Steinbrecher, I'm currently in the last year of the business informatics (Economics and Computer Science) master at Vienna University of Technology.
-I'm interested in financial markets, (algorithmic) trading, computer science and also bayesian statistics (especially MCMC methods).
+My name is Lukas Steinbrecher, I'm interested in financial markets, (algorithmic) trading, computer science and also bayesian statistics (especially MCMC methods).
 
 If you have any questions or comments feel free to contact me via lukas@lukstei.com or on [lukstei.com](https://lukstei.com).
 
