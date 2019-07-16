@@ -5,11 +5,9 @@ This is a general purpose lightweight backtesting engine for stocks, written in 
 Some advantages compared to other backtesting implementations are:
 
 * It uses a callback model and since it is implemented in java it should be pretty performant when running many backtests
-* Implemented in a mature programming language
 * Easily extensible
-* Strategies are easily debuggable using a java IDE
+* Strategies are easily debuggable using a Java IDE
 * Lightweight and therefore the backtesting engine is easily verifiable
-* No dependencies
 * Backtesting results are further analyzable in R or Excel since it uses a CSV output format
 
 

@@ -4,18 +4,21 @@ import org.lst.trading.lib.backtest.Backtest;
 import org.lst.trading.lib.model.ClosedOrder;
 import org.lst.trading.lib.model.TradingStrategy;
 import org.lst.trading.lib.series.MultipleDoubleSeries;
+import org.lst.trading.lib.util.AlphaVantageHistoricalPriceService;
+import org.lst.trading.lib.util.HistoricalPriceService;
 import org.lst.trading.lib.util.Util;
-import org.lst.trading.lib.util.yahoo.YahooFinance;
 import org.lst.trading.main.strategy.kalman.CointegrationTradingStrategy;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Locale;
 
 import static java.lang.String.format;
 
 public class BacktestMain {
-    public static void main(String[] args) throws URISyntaxException, IOException {
+    static String alphaVantantageApiKey = ""; // fill API key in here or pass via system property: -Dalphavantantage.apikey=APIKEY
+    
+    public static void main(String[] args) throws Exception {
+        findApiKey();
+
         String x = "GLD";
         String y = "GDX";
 
@@ -23,7 +26,7 @@ public class BacktestMain {
         TradingStrategy strategy = new CointegrationTradingStrategy(x, y);
 
         // download historical prices
-        YahooFinance finance = new YahooFinance();
+        HistoricalPriceService finance = new AlphaVantageHistoricalPriceService(alphaVantantageApiKey);
         MultipleDoubleSeries priceSeries = new MultipleDoubleSeries(finance.getHistoricalAdjustedPrices(x).toBlocking().first(), finance.getHistoricalAdjustedPrices(y).toBlocking().first());
 
         // initialize the backtesting engine
@@ -53,5 +56,17 @@ public class BacktestMain {
 
         System.out.println("Orders: " + Util.writeStringToTempFile(orders.toString()));
         System.out.println("Statistics: " + Util.writeCsv(new MultipleDoubleSeries(result.getPlHistory(), result.getMarginHistory())));
+    }
+
+    private static void findApiKey() {
+        String key = System.getProperty("alphavantantage.apikey");
+        if (key != null) {
+            alphaVantantageApiKey = key;
+        }
+
+        if (alphaVantantageApiKey.isEmpty()) {
+            System.out.println("ERROR: Claim free alphavantage API key at https://www.alphavantage.co/support/#api-key and set the alphaVantantageApiKey variable accordingly");
+            System.exit(1);
+        }
     }
 }
