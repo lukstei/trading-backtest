@@ -25,7 +25,7 @@ public class AlphaVantageHistoricalPriceService implements HistoricalPriceServic
     public static final CsvReader.ParseFunction<Double> HIGH_COLUMN = doubleColumn("high");
     public static final CsvReader.ParseFunction<Double> LOW_COLUMN = doubleColumn("low");
     public static final CsvReader.ParseFunction<Double> OPEN_COLUMN = doubleColumn("open");
-    public static final CsvReader.ParseFunction<Double> VOLUME_COLUMN = doubleColumn("colume");
+    public static final CsvReader.ParseFunction<Double> VOLUME_COLUMN = doubleColumn("volume");
 
     private static final Logger log = LoggerFactory.getLogger(AlphaVantageHistoricalPriceService.class);
 
