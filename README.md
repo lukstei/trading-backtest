@@ -1,6 +1,6 @@
 ## What?
 
-This is a general purpose lightweight backtesting engine for stocks, written in modern Java 8.
+This is a general purpose lightweight backtesting engine for stocks, written in Java.
 
 Some advantages compared to other backtesting implementations are:
 
