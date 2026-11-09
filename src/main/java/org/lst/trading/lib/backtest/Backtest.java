@@ -71,6 +71,14 @@ public class Backtest {
             return Statistics.drawdown(getAccountValueHistory().toArray())[1];
         }
 
+        public double getCalmar() {
+            double ddPct = getMaxDrawdownPercent();
+            if (ddPct == 0) {
+                return Double.NaN;
+            }
+            return getAnnualizedReturn() / Math.abs(ddPct);
+        }
+
         public int getDaysCount() {
             return mPlHistory.size();
         }
@@ -89,6 +97,10 @@ public class Backtest {
 
         public List<ClosedOrder> getOrders() {
             return mOrders;
+        }
+
+        public TradeStats getTradeStats() {
+            return new TradeStats(mOrders);
         }
     }
 
@@ -171,6 +183,8 @@ public class Backtest {
         mStrategy.onEnd();
 
         List<ClosedOrder> orders = Collections.unmodifiableList(mContext.mClosedOrders);
-        mResult = new Result(mContext.mClosedPl, mContext.mPl, mContext.mFundsHistory, orders, mDeposit, mDeposit + mContext.mClosedPl, mContext.mCommissions);
+        // net of commissions, all orders closed
+        double pl = mContext.mClosedPl - mContext.mCommissions;
+        mResult = new Result(pl, mContext.mPl, mContext.mFundsHistory, orders, mDeposit, mDeposit + pl, mContext.mCommissions);
     }
 }
