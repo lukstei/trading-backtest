@@ -180,6 +180,12 @@ public class Backtest {
             mContext.close(order);
         }
 
+        // post-liquidation equity as the last point
+        if (!mContext.mPl.isEmpty()) {
+            mContext.mPl.setLastItem(mContext.getPl());
+            mContext.mFundsHistory.setLastItem(mContext.getAvailableFunds());
+        }
+
         mStrategy.onEnd();
 
         List<ClosedOrder> orders = Collections.unmodifiableList(mContext.mClosedOrders);

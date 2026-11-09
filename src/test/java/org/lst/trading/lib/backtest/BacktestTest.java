@@ -56,9 +56,10 @@ public class BacktestTest {
         assertEquals(DEPOSIT + 27 - 4 * COMMISSION_PER_ORDER, result.getFinalValue(), DELTA);
         assertEquals(result.getInitialFund() + result.getPl(), result.getFinalValue(), DELTA);
 
-        // last history point is before the closing orders
-        assertEquals(DEPOSIT + 27 - 2 * COMMISSION_PER_ORDER, lastAccountValue(result), DELTA);
-        assertEquals(lastAccountValue(result) - 2 * COMMISSION_PER_ORDER, result.getFinalValue(), DELTA);
+        // last history point is after the closing orders
+        assertEquals(10, result.getDaysCount());
+        assertEquals(result.getFinalValue(), lastAccountValue(result), DELTA);
+        assertEquals(result.getFinalValue(), result.getMarginHistory().getLast(), DELTA);
     }
 
     @Test public void buyAndHoldIsOneTrade() {
