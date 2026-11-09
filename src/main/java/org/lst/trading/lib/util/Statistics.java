@@ -4,13 +4,21 @@ import org.apache.commons.math3.stat.StatUtils;
 
 public class Statistics {
     public static double[] drawdown(double[] series) {
-        double max = Double.MIN_VALUE;
-        double ddPct = Double.MAX_VALUE;
-        double dd = Double.MAX_VALUE;
+        double dd = 0;
+        double ddPct = 0;
+        if (series.length <= 1) {
+            return new double[]{dd, ddPct};
+        }
 
-        for (double x : series) {
+        // peak so far
+        double max = series[0];
+        for (int i = 1; i < series.length; i++) {
+            double x = series[i];
             dd = Math.min(x - max, dd);
-            ddPct = Math.min(x / max - 1, ddPct);
+            // pct only with a positive peak
+            if (max > 0) {
+                ddPct = Math.min(x / max - 1, ddPct);
+            }
             max = Math.max(max, x);
         }
 

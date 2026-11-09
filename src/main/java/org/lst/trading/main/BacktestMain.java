@@ -1,10 +1,12 @@
 package org.lst.trading.main;
 
 import org.lst.trading.lib.backtest.Backtest;
+import org.lst.trading.lib.backtest.TradeStats;
 import org.lst.trading.lib.model.ClosedOrder;
 import org.lst.trading.lib.model.TradingStrategy;
 import org.lst.trading.lib.series.MultipleDoubleSeries;
 import org.lst.trading.lib.util.AlphaVantageHistoricalPriceService;
+import org.lst.trading.lib.util.CsvHistoricalPriceService;
 import org.lst.trading.lib.util.HistoricalPriceService;
 import org.lst.trading.lib.util.Util;
 import org.lst.trading.main.strategy.kalman.CointegrationTradingStrategy;
@@ -15,18 +17,16 @@ import static java.lang.String.format;
 
 public class BacktestMain {
     static String alphaVantantageApiKey = ""; // fill API key in here or pass via system property: -Dalphavantantage.apikey=APIKEY
-    
-    public static void main(String[] args) throws Exception {
-        findApiKey();
 
+    public static void main(String[] args) throws Exception {
         String x = "GLD";
         String y = "GDX";
 
         // initialize the trading strategy
         TradingStrategy strategy = new CointegrationTradingStrategy(x, y);
 
-        // download historical prices
-        HistoricalPriceService finance = new AlphaVantageHistoricalPriceService(alphaVantantageApiKey);
+        // load historical prices
+        HistoricalPriceService finance = createPriceService();
         MultipleDoubleSeries priceSeries = new MultipleDoubleSeries(finance.getHistoricalAdjustedPrices(x).toBlocking().first(), finance.getHistoricalAdjustedPrices(y).toBlocking().first());
 
         // initialize the backtesting engine
@@ -51,22 +51,49 @@ public class BacktestMain {
         System.out.println("Backtest result of " + strategy.getClass() + ": " + strategy);
         System.out.println("Prices: " + priceSeries);
         System.out.println(format(Locale.US, "Simulated %d days, Initial deposit %d, Leverage %f", days, deposit, backtest.getLeverage()));
-        System.out.println(format(Locale.US, "Commissions = %f", result.getCommissions()));
-        System.out.println(format(Locale.US, "P/L = %.2f, Final value = %.2f, Result = %.2f%%, Annualized = %.2f%%, Sharpe (rf=0%%) = %.2f", result.getPl(), result.getFinalValue(), result.getReturn() * 100, result.getReturn() / (days / 251.) * 100, result.getSharpe()));
+        System.out.println(format(Locale.US, "Commissions = %.2f", result.getCommissions()));
+        System.out.println(format(Locale.US, "P/L = %.2f, Final value = %.2f, Result = %.2f%%, Annualized = %.2f%%, Sharpe (rf=0%%) = %.2f", result.getPl(), result.getFinalValue(), result.getReturn() * 100, result.getAnnualizedReturn() * 100, result.getSharpe()));
+
+        // risk and trade stats
+        TradeStats stats = result.getTradeStats();
+        System.out.println(format(Locale.US, "Max drawdown = %.2f (%.2f%%), Calmar = %s", result.getMaxDrawdown(), result.getMaxDrawdownPercent() * 100, formatRatio(result.getCalmar())));
+        System.out.println(format(Locale.US, "Trades = %d round trips (%d orders), Win rate = %s, Profit factor = %s", stats.getTradeCount(), stats.getOrderCount(), formatPercent(stats.getWinRate()), formatRatio(stats.getProfitFactor())));
+        System.out.println(format(Locale.US, "Avg win = %s, Avg loss = %s (before commissions)", formatRatio(stats.getAverageWin()), formatRatio(stats.getAverageLoss())));
 
         System.out.println("Orders: " + Util.writeStringToTempFile(orders.toString()));
         System.out.println("Statistics: " + Util.writeCsv(new MultipleDoubleSeries(result.getPlHistory(), result.getMarginHistory())));
     }
 
-    private static void findApiKey() {
+    // bundled csv unless an api key is set
+    private static HistoricalPriceService createPriceService() {
         String key = System.getProperty("alphavantantage.apikey");
         if (key != null) {
             alphaVantantageApiKey = key;
         }
 
         if (alphaVantantageApiKey.isEmpty()) {
-            System.out.println("ERROR: Claim free alphavantage API key at https://www.alphavantage.co/support/#api-key and set the alphaVantantageApiKey variable accordingly");
-            System.exit(1);
+            System.out.println("Using price files from data/");
+            return new CsvHistoricalPriceService("data");
         }
+        System.out.println("Using Alpha Vantage prices");
+        return new AlphaVantageHistoricalPriceService(alphaVantantageApiKey);
+    }
+
+    // n/a and inf instead of NaN and Infinity
+    private static String formatRatio(double value) {
+        if (Double.isNaN(value)) {
+            return "n/a";
+        }
+        if (Double.isInfinite(value)) {
+            return "inf";
+        }
+        return format(Locale.US, "%.2f", value);
+    }
+
+    private static String formatPercent(double value) {
+        if (Double.isNaN(value)) {
+            return "n/a";
+        }
+        return format(Locale.US, "%.1f%%", value * 100);
     }
 }

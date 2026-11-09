@@ -100,6 +100,13 @@ public class TimeSeries<T> implements Iterable<TimeSeries.Entry<T>> {
         return mData.get(index);
     }
 
+    // swap the last value, keep its instant
+    public void setLastItem(T item) {
+        check(!mData.isEmpty());
+        int last = mData.size() - 1;
+        mData.set(last, new Entry<>(item, mData.get(last).getInstant()));
+    }
+
     public interface MergeFunction<T, F> {
         F merge(T t1, T t2);
     }
